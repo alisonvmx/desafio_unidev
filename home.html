@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Desafio unidev</title>
+</head>
+<body>
+
+ <form id="form">
+
+    <h1>Consulta de Municipios</h1>
+    <br>
+    <td>Digite a UF:</td>
+    <td><input type="text" name="uf" size="2" maxlength="2" id="uf">
+    <td></td>
+    <button type="button" id="imp" name="button">Imprimir</button>  <button type="button" id="arq" name="button">gerar arquivo TXT</button>
+    </tr>
+</form>
+<br>
+  <div id="div1">
+
+  </div>
+
+   <ul id="list">
+  </ul>
+ 
+
+
+</body>
+<script type="text/javascript" src="java.js"></script>
+<script src="src/FileSaver.js"></script>
+
+<script>  document.getElementById('arq').addEventListener('click', function(e) {
+    var param = document.getElementById('uf').value;
+    var link = "https://servicodados.ibge.gov.br/api/v1/localidades/estados/";
+    var web = link+param+"/municipios";
+    console.log(web);
+    const dados = fetch(web).then(function(respostadoservidor){
+      return respostadoservidor.json()
+    })
+    .then(function(respostaconvertida){
+        var cidades ="";
+      for(var i=0; i < respostaconvertida.length;i++){
+      var cidade = respostaconvertida[i].id +" - "+ respostaconvertida[i].nome + " - " + respostaconvertida[i]['microrregiao']['mesorregiao']["UF"]["nome"] + " - " + respostaconvertida[i]['microrregiao']['mesorregiao']["UF"]["regiao"]["nome"] +" | ";
+      var cidades= cidades+=cidade;
+
+    };
+      var texto = JSON.stringify(cidades);
+      var blob = new Blob([texto], {type: "text/plain;charset=utf-8"});
+      saveAs(blob,"arquivo.txt");
+  })
+  }
+  );</script>
+</html>
+
+
